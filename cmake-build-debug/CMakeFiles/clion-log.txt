@@ -1,0 +1,11 @@
+/home/tamas/Downloads/clion-2018.2.6/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/tamas/CLionProjects/untitled
+-- Could NOT find Boost
+CMake Error: The following variables are used in this project, but they are set to NOTFOUND.
+Please set them or make sure they are set and tested correctly in the CMake files:
+Boost_INCLUDE_DIR (ADVANCED)
+   used as include directory in directory /home/tamas/CLionProjects/untitled
+   used as include directory in directory /home/tamas/CLionProjects/untitled
+   used as include directory in directory /home/tamas/CLionProjects/untitled
+
+-- Configuring incomplete, errors occurred!
+See also "/home/tamas/CLionProjects/untitled/cmake-build-debug/CMakeFiles/CMakeOutput.log".

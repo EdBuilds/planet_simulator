@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.12)
+project(untitled)
+
+set(CMAKE_CXX_STANDARD 14)
+find_package(Boost 1.36.0)
+find_package(OpenGL REQUIRED)
+find_package(GLUT REQUIRED)
+add_executable(untitled main.cpp)
+include_directories( ${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} )
+target_link_libraries(untitled ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} )
