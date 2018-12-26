@@ -1,62 +1,77 @@
+/*
+ * OGL01Shape3D.cpp: 3D Shapes
+ */
+#include <GL/glut.h>  // GLUT, include glu.h and gl.h
+#include "glm/glm/glm.hpp"
+#include "body.h" 
+#include <vector>
+/* Global variables */
+char title[] = "3D Shapes";
+std::vector<body> bodies;
+/* Initialize OpenGL Graphics */
+void initGL() {
+   glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
+   glClearDepth(1.0f);                   // Set background depth to farthest
+   glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
+   glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
+   glShadeModel(GL_SMOOTH);   // Enable smooth shading
+   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  // Nice perspective corrections
+   glPolygonMode( GL_FRONT_AND_BACK ,GL_LINE );
+}
+ 
+/* Handler for window-repaint event. Called back when the window first appears and
+   whenever the window needs to be re-painted. */
+void display() {
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
+   glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
 
-/* Copyright (c) Mark J. Kilgard, 1996. */
-
-/* This program is freely distributable without licensing fees
-   and is provided without guarantee or warrantee expressed or
-   implied. This program is -not- in the public domain. */
-
-/* This program is a response to a question posed by Gil Colgate
-   <gcolgate@sirius.com> about how lengthy a program is required using
-   OpenGL compared to using  Direct3D immediate mode to "draw a
-   triangle at screen coordinates 0,0, to 200,200 to 20,200, and I
-   want it to be blue at the top vertex, red at the left vertex, and
-   green at the right vertex".  I'm not sure how long the Direct3D
-   program is; Gil has used Direct3D and his guess is "about 3000
-   lines of code". */
-
-/* X compile line: cc -o simple simple.c -lglut -lGLU -lGL -lXmu -lXext -lX11 -lm */
-
-#include <GL/glut.h>
-
-void
-reshape(int w, int h)
-{
-    /* Because Gil specified "screen coordinates" (presumably with an
-       upper-left origin), this short bit of code sets up the coordinate
-       system to correspond to actual window coodrinates.  This code
-       wouldn't be required if you chose a (more typical in 3D) abstract
-       coordinate system. */
-
-    glViewport(0, 0, w, h);       /* Establish viewing area to cover entire window. */
-    glMatrixMode(GL_PROJECTION);  /* Start modifying the projection matrix. */
-    glLoadIdentity();             /* Reset project matrix. */
-    glOrtho(0, w, 0, h, -1, 1);   /* Map abstract coords directly to window coords. */
-    glScalef(1, -1, 1);           /* Invert Y axis so increasing Y goes down. */
-    glTranslatef(0, -h, 0);       /* Shift origin up to upper-left corner. */
+   for(auto&& currentBody:bodies){
+      currentBody.draw();
+   }
+   for(auto&& currentBody:bodies){
+      currentBody.updateForces(bodies);
+   }
+   for(auto&& currentBody:bodies){
+      currentBody.updateStates(0.01);
+   }
+   glutSwapBuffers();  // Swap the front and back frame buffers (double buffering)
+}
+ 
+/* Handler for window re-size event. Called back when the window first appears and
+   whenever the window is re-sized with its new width and height */
+void reshape(GLsizei width, GLsizei height) {  // GLsizei for non-negative integer
+   // Compute aspect ratio of the new window
+   if (height == 0) height = 1;                // To prevent divide by 0
+   GLfloat aspect = (GLfloat)width / (GLfloat)height;
+ 
+   // Set the viewport to cover the new window
+   glViewport(0, 0, width, height);
+ 
+   // Set the aspect ratio of the clipping volume to match the viewport
+   glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
+   glLoadIdentity();             // Reset
+   // Enable perspective projection with fovy, aspect, zNear and zFar
+   gluPerspective(45.0f, aspect, 0.1f, 100.0f);
 }
 
-void
-display(void)
-{
-    glClear(GL_COLOR_BUFFER_BIT);
-    glBegin(GL_TRIANGLES);
-    glColor3f(0.0, 0.0, 1.0);  /* blue */
-    glVertex2i(0, 0);
-    glColor3f(0.0, 1.0, 0.0);  /* green */
-    glVertex2i(200, 200);
-    glColor3f(1.0, 0.0, 0.0);  /* red */
-    glVertex2i(20, 200);
-    glEnd();
-    glFlush();  /* Single buffered, so needs a flush. */
+void timer(int value) {
+   glutPostRedisplay();      // Post re-paint request to activate display()
+   glutTimerFunc(10, timer, 0); // next timer call milliseconds later
 }
+/* Main function: GLUT runs as a console application starting at main() */
+int main(int argc, char** argv) {
+	bodies.push_back(body(glm::dvec3(2,0,-7),glm::dvec3(0,-3,0),glm::dvec3(0),glm::dvec3(1,7,4),1E12));
+	bodies.push_back(body(glm::dvec3(0,1,-9),glm::dvec3(0,3,0),glm::dvec3(0),glm::dvec3(10),1E12));
 
-int
-main(int argc, char **argv)
-{
-    glutInit(&argc, argv);
-    glutCreateWindow("single triangle");
-    glutDisplayFunc(display);
-    glutReshapeFunc(reshape);
-    glutMainLoop();
-    return 0;             /* ANSI C requires main to return int. */
+   glutInit(&argc, argv);            // Initialize GLUT
+   glutInitDisplayMode(GLUT_DOUBLE); // Enable double buffered mode
+   glutInitWindowSize(640, 480);   // Set the window's initial width & height
+   glutInitWindowPosition(50, 50); // Position the window's initial top-left corner
+   glutCreateWindow(title);          // Create window with the given title
+   glutDisplayFunc(display);       // Register callback handler for window re-paint event
+   glutReshapeFunc(reshape);       // Register callback handler for window re-size event
+   glutTimerFunc(0, timer, 0);     // First timer call immediately [NEW]
+   initGL();                       // Our own OpenGL initialization
+   glutMainLoop();                 // Enter the infinite event-processing loop
+   return 0;
 }

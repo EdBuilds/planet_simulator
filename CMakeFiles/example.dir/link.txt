@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/example.dir/solar_system.cpp.o  -o example 

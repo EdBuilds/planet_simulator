@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/tamas/edbuilds/planets/point_type.hpp
+boost/operators.hpp
+-
+ostream
+-
+
+/home/tamas/edbuilds/planets/solar_system.cpp
+iostream
+-
+boost/array.hpp
+-
+boost/numeric/odeint.hpp
+-
+point_type.hpp
+/home/tamas/edbuilds/planets/point_type.hpp
+
