@@ -177,6 +177,60 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/untitled.dir/build.make CMakeFiles/untitled.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+solarSystem.o: solarSystem.cpp.o
+
+.PHONY : solarSystem.o
+
+# target to build an object file
+solarSystem.cpp.o:
+	$(MAKE) -f CMakeFiles/untitled.dir/build.make CMakeFiles/untitled.dir/solarSystem.cpp.o
+.PHONY : solarSystem.cpp.o
+
+solarSystem.i: solarSystem.cpp.i
+
+.PHONY : solarSystem.i
+
+# target to preprocess a source file
+solarSystem.cpp.i:
+	$(MAKE) -f CMakeFiles/untitled.dir/build.make CMakeFiles/untitled.dir/solarSystem.cpp.i
+.PHONY : solarSystem.cpp.i
+
+solarSystem.s: solarSystem.cpp.s
+
+.PHONY : solarSystem.s
+
+# target to generate assembly for a file
+solarSystem.cpp.s:
+	$(MAKE) -f CMakeFiles/untitled.dir/build.make CMakeFiles/untitled.dir/solarSystem.cpp.s
+.PHONY : solarSystem.cpp.s
+
+solids.o: solids.cpp.o
+
+.PHONY : solids.o
+
+# target to build an object file
+solids.cpp.o:
+	$(MAKE) -f CMakeFiles/untitled.dir/build.make CMakeFiles/untitled.dir/solids.cpp.o
+.PHONY : solids.cpp.o
+
+solids.i: solids.cpp.i
+
+.PHONY : solids.i
+
+# target to preprocess a source file
+solids.cpp.i:
+	$(MAKE) -f CMakeFiles/untitled.dir/build.make CMakeFiles/untitled.dir/solids.cpp.i
+.PHONY : solids.cpp.i
+
+solids.s: solids.cpp.s
+
+.PHONY : solids.s
+
+# target to generate assembly for a file
+solids.cpp.s:
+	$(MAKE) -f CMakeFiles/untitled.dir/build.make CMakeFiles/untitled.dir/solids.cpp.s
+.PHONY : solids.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -192,6 +246,12 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... solarSystem.o"
+	@echo "... solarSystem.i"
+	@echo "... solarSystem.s"
+	@echo "... solids.o"
+	@echo "... solids.i"
+	@echo "... solids.s"
 .PHONY : help
 
 

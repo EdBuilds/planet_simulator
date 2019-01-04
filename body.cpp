@@ -5,6 +5,7 @@
 #include "body.h"
 #include <GL/glut.h>  // GLUT, include glu.h and gl.h
 #include <iostream>
+#include <math.h>
 static const double G= 6.6740831E-11;
 static const double MinCollDist= 1E-20;
 
@@ -22,9 +23,11 @@ void body::updateStates(double dt){
 	velocity+=dt*acceleration;
 	position+=dt*velocity;
 	orientation+=dt*rate;
+	trail[trail_head]=position;
+	trail_head=(trail_head+1)%TRAIL_LENGHT;
 }
 
-body::body(glm::dvec3 _position, glm::dvec3 _velocity,glm::dvec3 _orientation, glm::dvec3 _rate,double _mass){
+body::body(glm::dvec3 _position, glm::dvec3 _velocity,glm::dvec3 _orientation, glm::dvec3 _rate,double _mass, unsigned short _solid_type){
 	position=_position;
 	velocity=_velocity;
 	orientation=_orientation;
@@ -32,59 +35,58 @@ body::body(glm::dvec3 _position, glm::dvec3 _velocity,glm::dvec3 _orientation, g
 	mass=_mass;
 acceleration=glm::dvec3(0);
 velocity=_velocity;
+solid.solid_type=_solid_type;
+scale=0.5;
+for(int i=0;i<TRAIL_LENGHT;++i){
+	trail[i]=_position;
 }
+trail_head=0;
+}
+body::body(){
+acceleration=glm::dvec3(0);
+scale=0.5;
+};
 
 void body::draw() {
-   // Render a color-cube consisting of 6 quads with different colors
-   glLoadIdentity();                 // Reset the model-view matrix
+glBegin(GL_LINES);
+float alpha=0.0;
+for(int i=(trail_head+1)%TRAIL_LENGHT;i!=trail_head;i=(i+1)%TRAIL_LENGHT){
+	   glColor4f(1,1,1,alpha);
+	glVertex3f(trail[i].x,trail[i].y,trail[i].z);	
+	alpha+=1.0/TRAIL_LENGHT;
+}
+glEnd();
+
    glTranslated(position.x,position.y,position.z);  // Move right and into the screen
    glRotated(orientation.x,1,0,0);
    glRotated(orientation.y,0,1,0);
    glRotated(orientation.z,0,0,1);
-  glScalef(0.1,0.1,0.1); 
-
-   glBegin(GL_QUADS);                // Begin drawing the color cube with 6 quads
-   // Top face (y = 1.0f)
-   // Define vertices in counter-clockwise (CCW) order with normal pointing out
-   glColor3f(0.0f, 1.0f, 0.0f);     // Green
-   glVertex3f(1.0f, 1.0f, -1.0f);
-   glVertex3f(-1.0f, 1.0f, -1.0f);
-   glVertex3f(-1.0f, 1.0f, 1.0f);
-   glVertex3f(1.0f, 1.0f, 1.0f);
-
-   // Bottom face (y = -1.0f)
-   glColor3f(1.0f, 0.5f, 0.0f);     // Orange
-   glVertex3f(1.0f, -1.0f, 1.0f);
-   glVertex3f(-1.0f, -1.0f, 1.0f);
-   glVertex3f(-1.0f, -1.0f, -1.0f);
-   glVertex3f(1.0f, -1.0f, -1.0f);
-
-   // Front face  (z = 1.0f)
-   glColor3f(1.0f, 0.0f, 0.0f);     // Red
-   glVertex3f(1.0f, 1.0f, 1.0f);
-   glVertex3f(-1.0f, 1.0f, 1.0f);
-   glVertex3f(-1.0f, -1.0f, 1.0f);
-   glVertex3f(1.0f, -1.0f, 1.0f);
-
-   // Back face (z = -1.0f)
-   glColor3f(1.0f, 1.0f, 0.0f);     // Yellow
-   glVertex3f(1.0f, -1.0f, -1.0f);
-   glVertex3f(-1.0f, -1.0f, -1.0f);
-   glVertex3f(-1.0f, 1.0f, -1.0f);
-   glVertex3f(1.0f, 1.0f, -1.0f);
-
-   // Left face (x = -1.0f)
-   glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-   glVertex3f(-1.0f, 1.0f, 1.0f);
-   glVertex3f(-1.0f, 1.0f, -1.0f);
-   glVertex3f(-1.0f, -1.0f, -1.0f);
-   glVertex3f(-1.0f, -1.0f, 1.0f);
-
-   // Right face (x = 1.0f)
-   glColor3f(1.0f, 0.0f, 1.0f);     // Magenta
-   glVertex3f(1.0f, 1.0f, -1.0f);
-   glVertex3f(1.0f, 1.0f, 1.0f);
-   glVertex3f(1.0f, -1.0f, 1.0f);
-   glVertex3f(1.0f, -1.0f, -1.0f);
-   glEnd();  // End of drawing color-cube
+   glScaled(scale,scale,scale); 
+	   glColor4f(1,1,1,1);
+   solid.draw();
+   
 }
+void body::merge(const body &other){
+	velocity=(velocity*mass+other.velocity*other.mass)/(mass+other.mass);
+	rate=(rate*mass+other.rate*other.mass)/(mass+other.mass);
+	mass+=other.mass;
+//	scale=cbrt(mass)/100000;
+	solid.solid_type=rand()%4+1;	
+	std::cout<<"collision! scale"<<scale<<" type:"<<solid.solid_type<<std::endl;	
+}
+
+body::body(const body& bod){
+position=bod.position;
+velocity=bod.velocity;
+orientation=bod.orientation;
+rate=bod.rate;
+mass=bod.mass;
+acceleration=bod.acceleration;
+solid.solid_type=bod.solid.solid_type;
+scale=bod.scale;
+for(int i=0;i<TRAIL_LENGHT;++i){
+	trail[i]=bod.trail[i];
+}
+trail_head=bod.trail_head;
+}
+

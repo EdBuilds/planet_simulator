@@ -81,6 +81,18 @@
 		<Unit filename="/home/tamas/edbuilds/planets/main.cpp">
 			<Option target="untitled"/>
 		</Unit>
+		<Unit filename="/home/tamas/edbuilds/planets/solarSystem.cpp">
+			<Option target="untitled"/>
+		</Unit>
+		<Unit filename="/home/tamas/edbuilds/planets/solarSystem.h">
+			<Option target="untitled"/>
+		</Unit>
+		<Unit filename="/home/tamas/edbuilds/planets/solids.cpp">
+			<Option target="untitled"/>
+		</Unit>
+		<Unit filename="/home/tamas/edbuilds/planets/solids.h">
+			<Option target="untitled"/>
+		</Unit>
 		<Unit filename="/home/tamas/edbuilds/planets/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

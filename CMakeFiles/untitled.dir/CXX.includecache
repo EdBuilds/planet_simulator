@@ -1086,7 +1086,13 @@ detail/setup.hpp
 detail/func_vector_relational.inl
 /home/tamas/edbuilds/planets/glm/glm/detail/func_vector_relational.inl
 
-/home/tamas/edbuilds/planets/main.cpp
+/home/tamas/edbuilds/planets/solarSystem.cpp
+solarSystem.h
+/home/tamas/edbuilds/planets/solarSystem.h
+iostream
+-
+
+/home/tamas/edbuilds/planets/solarSystem.h
 GL/glut.h
 -
 glm/glm/glm.hpp
@@ -1097,4 +1103,10 @@ vector
 -
 
 /home/tamas/edbuilds/planets/solids.h
+GL/glut.h
+-
+vector
+-
+glm/glm/glm.hpp
+/home/tamas/edbuilds/planets/glm/glm/glm.hpp
 

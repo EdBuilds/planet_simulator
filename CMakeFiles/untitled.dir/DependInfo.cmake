@@ -6,6 +6,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/tamas/edbuilds/planets/body.cpp" "/home/tamas/edbuilds/planets/CMakeFiles/untitled.dir/body.cpp.o"
   "/home/tamas/edbuilds/planets/main.cpp" "/home/tamas/edbuilds/planets/CMakeFiles/untitled.dir/main.cpp.o"
+  "/home/tamas/edbuilds/planets/solarSystem.cpp" "/home/tamas/edbuilds/planets/CMakeFiles/untitled.dir/solarSystem.cpp.o"
+  "/home/tamas/edbuilds/planets/solids.cpp" "/home/tamas/edbuilds/planets/CMakeFiles/untitled.dir/solids.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

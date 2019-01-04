@@ -5,18 +5,22 @@
 #include "glm/glm/glm.hpp"
 #include "body.h" 
 #include <vector>
+#include "solarSystem.h"
 /* Global variables */
 char title[] = "3D Shapes";
 std::vector<body> bodies;
+solarSystem *celestials;
 /* Initialize OpenGL Graphics */
 void initGL() {
-   glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
+   glClearColor(0.15625f, 0.15625f,0.15625f, 1.0f); // Set background color to black and opaque
    glClearDepth(1.0f);                   // Set background depth to farthest
    glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
    glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
    glShadeModel(GL_SMOOTH);   // Enable smooth shading
    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  // Nice perspective corrections
    glPolygonMode( GL_FRONT_AND_BACK ,GL_LINE );
+   glEnable( GL_BLEND );
+   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
  
 /* Handler for window-repaint event. Called back when the window first appears and
@@ -24,16 +28,8 @@ void initGL() {
 void display() {
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
    glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
-
-   for(auto&& currentBody:bodies){
-      currentBody.draw();
-   }
-   for(auto&& currentBody:bodies){
-      currentBody.updateForces(bodies);
-   }
-   for(auto&& currentBody:bodies){
-      currentBody.updateStates(0.01);
-   }
+   celestials->update();
+   celestials->draw();
    glutSwapBuffers();  // Swap the front and back frame buffers (double buffering)
 }
  
@@ -51,7 +47,7 @@ void reshape(GLsizei width, GLsizei height) {  // GLsizei for non-negative integ
    glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
    glLoadIdentity();             // Reset
    // Enable perspective projection with fovy, aspect, zNear and zFar
-   gluPerspective(45.0f, aspect, 0.1f, 100.0f);
+   gluPerspective(45.0f, aspect, 0.1f, 1000.0f);
 }
 
 void timer(int value) {
@@ -60,9 +56,9 @@ void timer(int value) {
 }
 /* Main function: GLUT runs as a console application starting at main() */
 int main(int argc, char** argv) {
-	bodies.push_back(body(glm::dvec3(2,0,-7),glm::dvec3(0,-3,0),glm::dvec3(0),glm::dvec3(1,7,4),1E12));
-	bodies.push_back(body(glm::dvec3(0,1,-9),glm::dvec3(0,3,0),glm::dvec3(0),glm::dvec3(10),1E12));
-
+//	bodies.push_back(body(glm::dvec3(0,1,-3),glm::dvec3(0,3,-1),glm::dvec3(0),glm::dvec3(10),1E12));
+//gluLookAt()
+   celestials=new solarSystem(9);
    glutInit(&argc, argv);            // Initialize GLUT
    glutInitDisplayMode(GLUT_DOUBLE); // Enable double buffered mode
    glutInitWindowSize(640, 480);   // Set the window's initial width & height

@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/untitled.dir/main.cpp.o"
   "CMakeFiles/untitled.dir/body.cpp.o"
+  "CMakeFiles/untitled.dir/solids.cpp.o"
+  "CMakeFiles/untitled.dir/solarSystem.cpp.o"
   "untitled.pdb"
   "untitled"
 )
